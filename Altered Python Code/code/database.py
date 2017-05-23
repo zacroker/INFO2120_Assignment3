@@ -95,7 +95,6 @@ def check_login(member_id, password):
              'residence': user_data[5],
              'member_type': user_type[0]
          }
-
     return tuples
 
 
@@ -542,11 +541,7 @@ def to_json(fn_name, ret_val):
 # =================================================================
 
 ## For debugging when testing as a module independent of web app
-if __name__ == "__main__":
-    from modules import pg8000
-    import configparser
-    import json
-    args = input('member_id and password: ').split()
-    while(check_login(args[0], args[1]) != 1):
-        args = input('member_id and password: ').split()
-    print('Done')
+# if __name__ == "__main__":
+#    args = input('member_id and password: ').split()
+#    while(check_login(args[0], args[1]) != 1):
+#        args = input('member_id and password: ').split()

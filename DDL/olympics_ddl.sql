@@ -1,6 +1,6 @@
 ﻿CREATE TABLE Country(
     country_code CHAR(3) PRIMARY KEY,
-    iso_code CHAR(2) UNIQUE,    
+    iso_code CHAR(2) UNIQUE,
     country_name VARCHAR(40)
 );
 
@@ -82,7 +82,7 @@ CREATE TABLE Event (
 CREATE TABLE RunsEvent (
     event_id   INT REFERENCES Event,
     member_id CHAR(10) REFERENCES Official,
-    role VARCHAR(10),	
+    role VARCHAR(10),
     PRIMARY KEY (event_id, member_id)
 );
 
@@ -93,7 +93,6 @@ CREATE TABLE TeamEvent (
 CREATE TABLE IndividualEvent (
     event_id   INT PRIMARY KEY REFERENCES Event
 );
-
 
 CREATE TABLE Team (
     event_id   INT REFERENCES TeamEvent,
@@ -108,7 +107,7 @@ CREATE TABLE TeamMember (
     team_name  VARCHAR(20),
     FOREIGN KEY (event_id, team_name) REFERENCES Team,
     athlete_id CHAR(10) REFERENCES Athlete,
-    PRIMARY KEY (event_id, team_name, athlete_id) 
+    PRIMARY KEY (event_id, team_name, athlete_id)
     -- actually (team_name, athlete_id) and (event_id, athlete_id) are keys
 );
 
@@ -141,4 +140,3 @@ CREATE TABLE Booking (
     journey_id INT REFERENCES Journey,
     PRIMARY KEY(journey_id, booked_for) -- natural key
 );
-
