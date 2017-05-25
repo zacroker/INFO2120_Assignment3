@@ -62,6 +62,8 @@ def check_login(member_id, password):
     cur = conn.cursor() # If connected successfully create a cursor
 
     # Attempt to match the member_id to the password
+    # Should we select the password?? or is that insecure
+    # Look into password hashing???
     try:
         sql = """SELECT *
             FROM member
