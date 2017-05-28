@@ -3,7 +3,6 @@
 -- Dependencies: 219
 -- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
 --
-
 INSERT INTO country VALUES ('AFG', 'AF', 'Afghanistan');
 INSERT INTO country VALUES ('ALB', 'AL', 'Albania');
 INSERT INTO country VALUES ('ALG', 'DZ', 'Algeria');

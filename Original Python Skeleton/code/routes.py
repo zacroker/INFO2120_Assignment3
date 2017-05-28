@@ -1,5 +1,4 @@
 # Importing the frameworks
-
 from modules import *
 from flask import *
 import database
@@ -13,11 +12,9 @@ page = {}
 app = Flask(__name__)
 app.secret_key = 'aab12124d346928d14710610f'
 
-
 #####################################################
 ##  INDEX
 #####################################################
-
 @app.route('/')
 def index():
     # Check if the user is logged in
@@ -32,7 +29,6 @@ def index():
 #####################################################
 ##  LOGIN
 #####################################################
-
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     # Check if they are submitting details, or they are just logging in
@@ -69,7 +65,6 @@ def login():
 #####################################################
 ##  LOGOUT
 #####################################################
-
 @app.route('/logout')
 def logout():
     session['logged_in'] = False
@@ -80,7 +75,6 @@ def logout():
 #####################################################
 ##  Member Details
 #####################################################
-
 @app.route('/details')
 def member_details():
     if( 'logged_in' not in session or not session['logged_in']):
@@ -99,7 +93,6 @@ def member_details():
 #####################################################
 ##  LIST EVENTS
 #####################################################
-
 @app.route('/events', methods=['POST', 'GET'])
 def list_events():
     if( 'logged_in' not in session or not session['logged_in']):
@@ -154,7 +147,6 @@ def event_details():
 #####################################################
 ##  MAKE BOOKING
 #####################################################
-
 @app.route('/new-booking' , methods=['GET', 'POST'])
 def new_booking():
     if( 'logged_in' not in session or not session['logged_in']):
@@ -181,17 +173,13 @@ def new_booking():
         flash("There was an error making your booking.")
         return(redirect(url_for('new_booking')))
 
-
-
 #####################################################
 ##  SHOW MY BOOKINGS
 #####################################################
-
 @app.route('/bookings', methods=['GET', 'POST'])
 def user_bookings():
     if( 'logged_in' not in session or not session['logged_in']):
         return redirect(url_for('login'))
-
 
     # Check the day filter - if it is not there, then get all bookings
     day_filter = request.args.get('dayfilter', '')
@@ -208,8 +196,6 @@ def user_bookings():
         bookings_list = []
 
     return render_template('bookings_list.html', page=page, session=session, bookings=bookings_list)
-
-
 
 @app.route('/booking-detail')
 def booking_detail():
@@ -243,7 +229,6 @@ def booking_detail():
 #####################################################
 ## Show Journeys
 #####################################################
-
 @app.route('/journeys', methods=['GET', 'POST'])
 def journeys():
     if( 'logged_in' not in session or not session['logged_in']):

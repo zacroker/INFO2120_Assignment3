@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
-
 from modules import pg8000
 import configparser
 import json
 
-
 #####################################################
 ##  Database Connect
 #####################################################
-
 '''
 Connects to the database using the connection string
 '''
@@ -21,7 +18,7 @@ def database_connect():
     connection = None
     try:
         # Parses the config file and connects using the connect string
-        connection = pg8000.connect(database=config['DATABASE']['user'],
+        connection = pg8000.connect(database=config['DATABASE']['database'],
                                     user=config['DATABASE']['user'],
                                     password=config['DATABASE']['password'],
                                     host=config['DATABASE']['host'])
@@ -37,7 +34,6 @@ def database_connect():
 #####################################################
 ##  Login
 #####################################################
-
 '''
 Check that the users information exists in the database.
 
@@ -510,4 +506,3 @@ def to_json(fn_name, ret_val):
 
 # =================================================================
 # =================================================================
-
