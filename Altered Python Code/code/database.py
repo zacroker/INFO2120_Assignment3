@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from modules import pg8000
 import configparser
 import json
@@ -7,7 +5,6 @@ import json
 #####################################################
 ##  Database Connect
 #####################################################
-
 '''
 Connects to the database using the connection string
 '''
@@ -36,7 +33,6 @@ def database_connect():
 #####################################################
 ##  Login
 #####################################################
-
 '''
 Check that the users information exists in the database.
 
@@ -49,12 +45,11 @@ Return information:
     return tuples relevant to the member IF password is correct
 '''
 def check_login(member_id, password):
-
-    # TODO
-    # Check if the user details are correct!
+    # TODO Check if the user details are correct!
     # Return the relevant information (watch the order!)
 
     # Ask for the database connection, and get the cursor set up
+    # Check what an except block does in dbconnect function i.e. can the conn object ever be None
     conn = database_connect()
     if conn == None:
         print('No connection to database') # Sent to debugger
@@ -62,14 +57,18 @@ def check_login(member_id, password):
     cur = conn.cursor() # If connected successfully create a cursor
 
     # Attempt to match the member_id to the password
-    # Should we select the password?? or is that insecure
-    # Look into password hashing???
+    # Should we select the password?? or is that insecure.Look into password hashing???
     try:
-        sql = """SELECT *
+        sql = """SELECT member_id, title, family_name, given_names, country_code, accommodation
             FROM member
             WHERE member_id = %s AND pass_word = %s;"""
         cur.execute(sql, (member_id, password))
-        user_data = cur.fetchone()              # Fetch the first row
+        user_data = cur.fetchone()      # Fetch the first row
+        # Maybe this could be implemented with a case statement too?
+        cur.execute("""SELECT 'athlete' FROM Athlete WHERE member_id = %s
+                    UNION SELECT 'staff' FROM Staff WHERE member_id = %s
+                    UNION SELECT 'official' FROM Official WHERE member_id = %s""", (user_data[0], user_data[0], user_data[0]))
+        user_type = cur.fetchone()[0]
         cur.close()                     # Close the cursor
         conn.close()                    # Close the connection to the db
     # If there is an error, send a message to the debugger
@@ -81,21 +80,14 @@ def check_login(member_id, password):
         print('Invalid login details')
         return -1
 
-
-    # TODO Dummy data - change rows to be useful!
-    # FORMAT = [member_id, title, firstname, familyname, countryName, residence]
-
-    # TODO get the member type...
-    user_type = ['athlete']
-
     tuples = {
-             'member_id': user_data[0],
-             'title': user_data[1],
-             'first_name': user_data[2],
-             'family_name': user_data[3],
-             'country_name': user_data[4],
-             'residence': user_data[5],
-             'member_type': user_type[0]
+             'member_id'    : user_data[0],
+             'title'        : user_data[1],
+             'first_name'   : user_data[3],
+             'family_name'  : user_data[2],
+             'country_name' : user_data[4],
+             'residence'    : user_data[5],
+             'member_type'  : user_type
          }
     return tuples
 
@@ -468,7 +460,6 @@ def event_details(eventname):
 Get the results for a given event.
 '''
 def get_results_for_event(event_name):
-
     # TODO - update the results_db to get information from the database!
     # Return the data (NOTE: look at the information, requires more than a simple select. NOTE ALSO: ordering of columns)
     # This should return a list of who participated and the results.
@@ -527,7 +518,6 @@ def get_all_officials(event_name):
         'role': row[1]
     } for row in officials_db]
 
-
     return officials
 
 # =================================================================
@@ -543,7 +533,7 @@ def to_json(fn_name, ret_val):
 # =================================================================
 
 ## For debugging when testing as a module independent of web app
-# if __name__ == "__main__":
+#if __name__ == "__main__":
 #    args = input('member_id and password: ').split()
 #    while(check_login(args[0], args[1]) != 1):
 #        args = input('member_id and password: ').split()

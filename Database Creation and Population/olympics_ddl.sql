@@ -1,4 +1,4 @@
-﻿DROP TABLE IF EXISTS Accommodation CASCADE;
+DROP TABLE IF EXISTS Accommodation CASCADE;
 DROP TABLE IF EXISTS Country CASCADE;
 DROP TABLE IF EXISTS Location CASCADE;
 DROP TABLE IF EXISTS Place CASCADE;
@@ -161,3 +161,6 @@ CREATE TABLE Booking (
     journey_id INT REFERENCES Journey,
     PRIMARY KEY(journey_id, booked_for) -- natural key
 );
+
+CREATE OR REPLACE FUNCTION update_journey_nbooked() RETURNS TRIGGER AS $journey_nbooked$ BEGIN IF(TG_OP = 'DELETE') THEN UPDATE Journey SET nbooked = nbooked - 1 WHERE journey_id = OLD.journey_id; RETURN OLD; ELSIF(TG_OP = 'INSERT') THEN UPDATE Journey SET nbooked = nbooked + 1 WHERE journey_id = NEW.journey_id; RETURN NEW; END IF; RETURN NULL; END; $journey_nbooked$ LANGUAGE plpgsql;
+CREATE TRIGGER trg_update_journey_nbooked AFTER INSERT OR DELETE ON Booking FOR EACH ROW EXECUTE PROCEDURE update_journey_nbooked();
